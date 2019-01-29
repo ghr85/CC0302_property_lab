@@ -112,18 +112,36 @@ class Property
 
     end
 
-# Codeclan solutions
-    def Property.find_by_address(address)
+
+    def Property.find_our_address(address)
       db = PG.connect({dbname: 'properties', host: 'localhost'})
       sql = "SELECT * from properties WHERE address = $1"
       values = [address]
       db.prepare("find_by_address", sql)
       results_array = db.exec_prepared("find_by_address", values)
       db.close()
-      property_hash = results_array[0]
-      found_property = Property.new(property_hash)
+      new_array = results_array.map{|result| result}
       binding.pry
-      return found_property
-
+      if new_array.length == 0
+        return nil
+      else
+        property_hash = results_array[0]
+        found_property = Property.new(property_hash)
+        return found_property
+      end
     end
+
+    # Codeclan solutions
+    # def Property.find_by_address(address)
+    #   db = PG.connect({dbname: 'properties', host: 'localhost'})
+    #   sql = "SELECT * from properties WHERE address = $1"
+    #   values = [address]
+    #   db.prepare("find_by_address", sql) #prepare SQL for execution
+    #   results_array = db.exec_prepared("find_by_address", values) #postgres returns an array of strings
+    #   db.close()
+    #   property_hash = results_array[0]
+    #   found_property = Property.new(property_hash)
+    #   return found_property
+
+  #  end
   end   #class end

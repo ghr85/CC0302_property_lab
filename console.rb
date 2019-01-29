@@ -79,6 +79,6 @@ property_5.save()
 # property_4.update()
 #
 # property_5.delete
-p Property.find_by_id(1) #use class method rather than an instance method
- p Property.find_by_address('Codeclan CEO House')
-Property.find_by_address('ficticious')
+Property.find_by_id(1) #use class method rather than an instance method
+p Property.find_our_address('Codeclan CEO House')
+p Property.find_our_address('ficticious')
