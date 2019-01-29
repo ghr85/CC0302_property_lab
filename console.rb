@@ -73,3 +73,6 @@ property_2.save()
 property_3.save()
 property_4.save()
 property_5.save()
+
+property_4.value = 1_250_000
+property_4.update()
