@@ -5,6 +5,7 @@
 # There is no testing for databases on this course - can look into elsewhere.
 
 require('PG')
+
 class Property
 
   attr_accessor :address, :value, :number_of_bedrooms, :year_built, :status, :square_footage, :build_type, :id
@@ -66,7 +67,7 @@ class Property
     square_footage,
     build_type
     ) = (
-        $1, $2, $3, $4, $5, $6, $7
+      $1, $2, $3, $4, $5, $6, $7
       ) WHERE id = $8
       "
       values = [@address, @value, @number_of_bedrooms, @year_built, @status, @square_footage, @build_type, @id]#order must always match!
@@ -79,5 +80,12 @@ class Property
       db.close()
     end
 
+    def Property.delete_all()
+      db = PG.connect( { dbname: 'properties', host: 'localhost'})
+      sql = "DELETE FROM properties"
+      db.prepare("delete_all", sql)
+      db.exec_prepared("delete_all")
+      db.close()
+    end
 
-end   #class end
+  end   #class end

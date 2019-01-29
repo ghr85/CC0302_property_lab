@@ -7,6 +7,7 @@
 require_relative('models/property')
 require('pry')
 
+Property.delete_all()
 
 property_1 = Property.new(
   {
