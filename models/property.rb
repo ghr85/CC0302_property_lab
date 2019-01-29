@@ -5,6 +5,7 @@
 # There is no testing for databases on this course - can look into elsewhere.
 
 require('PG')
+require('pry')
 
 class Property
 
@@ -80,6 +81,15 @@ class Property
       db.close()
     end
 
+    def delete
+      db = PG.connect( { dbname: 'properties', host: 'localhost'})
+      sql = "DELETE FROM properties WHERE id = $1"
+      values = [@id]
+      db.prepare("delete_one", sql)
+      db.exec_prepared("delete_one", values)
+      db.close()
+    end
+
     def Property.delete_all()
       db = PG.connect( { dbname: 'properties', host: 'localhost'})
       sql = "DELETE FROM properties"
@@ -88,4 +98,32 @@ class Property
       db.close()
     end
 
+    def Property.find_by_id(id) #this is a class method
+      #connect to DB. Ask PG to connect, return a DB object.
+      db = PG.connect( { dbname: 'properties', host: 'localhost'})
+      #Define SQL - USE DOUBLE QUOTES HERE AS SQL WITHIN WILL USE SINGLE AROUND INTERPOLATED STRINGS
+      sql = "SELECT * FROM properties WHERE id = #{id}"
+      db.prepare("find_by_id", sql ) #PREPARED STATEMENT, BREAK SQL INJECTION ATTACK
+      #execute SQL on DB object. SQL instruction  passed as a parameter and executed on DB objet.
+      property = db.exec_prepared("find_by_id")#does the execution and gives us a PG object - array of hashes - think pet example
+
+      db.close()
+      return property.map{|property_hash| Property.new(property_hash)} #this then maps the result, converting to new pizza object - otherwise a PG object which needs translated
+
+    end
+
+# Codeclan solutions
+    def Property.find_by_address(address)
+      db = PG.connect({dbname: 'properties', host: 'localhost'})
+      sql = "SELECT * from properties WHERE address = $1"
+      values = [address]
+      db.prepare("find_by_address", sql)
+      results_array = db.exec_prepared("find_by_address", values)
+      db.close()
+      property_hash = results_array[0]
+      found_property = Property.new(property_hash)
+      binding.pry
+      return found_property
+
+    end
   end   #class end

@@ -75,5 +75,10 @@ property_3.save()
 property_4.save()
 property_5.save()
 
-property_4.value = 1_250_000
-property_4.update()
+# property_4.value = 1_250_000
+# property_4.update()
+#
+# property_5.delete
+p Property.find_by_id(1) #use class method rather than an instance method
+ p Property.find_by_address('Codeclan CEO House')
+Property.find_by_address('ficticious')
